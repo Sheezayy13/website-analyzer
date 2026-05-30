@@ -129,7 +129,7 @@ export function Analyzer() {
           </DialogTrigger>
           <DialogContent className="sm:max-w-md">
             <DialogHeader>
-              <DialogTitle>Sentinel Settings</DialogTitle>
+              <DialogTitle>Settings</DialogTitle>
               <DialogDescription>
                 Configure your Gemini API key. This key is stored securely in your browser's local storage and used directly to perform analyses.
               </DialogDescription>
@@ -223,7 +223,7 @@ export function Analyzer() {
                 )}
               </Button>
             </div>
-            <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
+            {/* <div className="mt-3 flex flex-wrap items-center gap-2 text-xs text-muted-foreground">
               <span>Try:</span>
               {EXAMPLES.map((ex) => (
                 <button
@@ -236,7 +236,7 @@ export function Analyzer() {
                   {ex}
                 </button>
               ))}
-            </div>
+            </div> */}
           </TabsContent>
 
           <TabsContent value="html" className="mt-0">

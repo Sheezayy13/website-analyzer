@@ -18,21 +18,21 @@ export default function Page() {
               <ShieldCheck className="size-4" />
             </span>
             <span className="font-mono text-sm font-semibold tracking-tight">
-              Sentinel
+              Sheeza Tariq's Website Analyser
             </span>
           </div>
           <span className="text-xs text-muted-foreground">
-            AI Website Analyzer
+            AI-powered Website Analyzer
           </span>
         </div>
       </header>
 
       <section className="mx-auto max-w-5xl px-4 py-12 sm:px-6 sm:py-16">
         <div className="mx-auto max-w-2xl text-center">
-          <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
+          {/* <div className="mb-5 inline-flex items-center gap-2 rounded-full border border-border bg-card px-3 py-1 text-xs text-muted-foreground">
             <span className="size-1.5 rounded-full bg-primary" />
             Powered by AI · 5-point audit
-          </div>
+          </div> */}
           <h1 className="text-balance text-4xl font-semibold tracking-tight sm:text-5xl">
             Find what&apos;s wrong with any website
           </h1>
@@ -41,7 +41,7 @@ export default function Page() {
             SEO, accessibility, performance, security, and design — with a
             prioritized list of issues and concrete fixes.
           </p>
-          <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
+          {/* <div className="mt-6 flex flex-wrap items-center justify-center gap-2">
             {PILLARS.map((p) => (
               <span
                 key={p.label}
@@ -51,7 +51,7 @@ export default function Page() {
                 {p.label}
               </span>
             ))}
-          </div>
+          </div> */}
         </div>
 
         <div className="mt-10">
