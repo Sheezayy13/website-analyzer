@@ -35,20 +35,41 @@ export function Analyzer() {
   const [apiKey, setApiKey] = useState("")
   const [tempKey, setTempKey] = useState("")
   const [isSettingsOpen, setIsSettingsOpen] = useState(false)
+  const [isKeyFromEnv, setIsKeyFromEnv] = useState(false)
 
   useEffect(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("GEMINI_API_KEY") || ""
-      setApiKey(saved)
-      setTempKey(saved)
+      const envKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || ""
+      if (saved) {
+        setApiKey(saved)
+        setTempKey(saved)
+        setIsKeyFromEnv(false)
+      } else if (envKey) {
+        setApiKey(envKey)
+        setTempKey(envKey)
+        setIsKeyFromEnv(true)
+      } else {
+        setApiKey("")
+        setTempKey("")
+        setIsKeyFromEnv(false)
+      }
     }
   }, [])
 
   const saveApiKey = (key: string) => {
     const trimmed = key.trim()
-    setApiKey(trimmed)
     if (typeof window !== "undefined") {
-      localStorage.setItem("GEMINI_API_KEY", trimmed)
+      if (trimmed) {
+        localStorage.setItem("GEMINI_API_KEY", trimmed)
+        setApiKey(trimmed)
+        setIsKeyFromEnv(false)
+      } else {
+        localStorage.removeItem("GEMINI_API_KEY")
+        const envKey = process.env.NEXT_PUBLIC_GEMINI_API_KEY || ""
+        setApiKey(envKey)
+        setIsKeyFromEnv(!!envKey)
+      }
     }
     setIsSettingsOpen(false)
   }
@@ -89,7 +110,7 @@ export function Analyzer() {
           <span className="text-muted-foreground font-medium">
             {apiKey ? (
               <>
-                Gemini API Key configured <span className="font-mono text-xs opacity-50">({apiKey.slice(0, 4)}...{apiKey.slice(-4)})</span>
+                Gemini API Key configured {isKeyFromEnv ? "via system" : "custom"} <span className="font-mono text-xs opacity-50">({apiKey.slice(0, 4)}...{apiKey.slice(-4)})</span>
               </>
             ) : (
               "Gemini API Key required for analysis"
