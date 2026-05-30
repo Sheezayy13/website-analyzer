@@ -61,8 +61,8 @@ export default function Page() {
 
       <footer className="border-t border-border">
         <div className="mx-auto max-w-5xl px-4 py-6 text-center text-xs text-muted-foreground sm:px-6">
-          Sentinel analyzes the HTML it can fetch or that you paste. Results are
-          AI-generated guidance, not a substitute for full audits.
+          This tool fetches the content of the URL, or the html content you provide, and AI analyzes it. Results are just
+          AI-generated guidance, not a substitute for professional audits.
         </div>
       </footer>
     </main>
