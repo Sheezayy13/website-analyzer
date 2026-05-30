@@ -43,6 +43,7 @@ jobs:
       - name: Build 🏗️
         env:
           NEXT_PUBLIC_GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+          NEXT_PUBLIC_BASE_PATH: /website-analyzer
         run: npm run build
 
       - name: Upload artifact 📤
