@@ -124,23 +124,41 @@ export async function analyzeWebsite(
       resolvedUrl = normalizeUrl(value)
       target = resolvedUrl
 
-      // To bypass CORS in browser environment, use allorigins proxy
-      const proxyUrl = `https://api.allorigins.win/raw?url=${encodeURIComponent(resolvedUrl)}`
-      const controller = new AbortController()
-      const timeout = setTimeout(() => controller.abort(), 20_000)
+      // Multiple CORS proxies as fallbacks
+      const proxies = [
+        (url: string) => `https://corsproxy.io/?${encodeURIComponent(url)}`,
+        (url: string) => `https://api.allorigins.win/raw?url=${encodeURIComponent(url)}`,
+        (url: string) => `https://api.codetabs.com/v1/proxy?quest=${encodeURIComponent(url)}`,
+      ]
 
-      const res = await fetch(proxyUrl, {
-        signal: controller.signal,
-      }).finally(() => clearTimeout(timeout))
+      let lastError = ""
+      for (const makeProxyUrl of proxies) {
+        try {
+          const proxyUrl = makeProxyUrl(resolvedUrl)
+          const controller = new AbortController()
+          const timeout = setTimeout(() => controller.abort(), 15_000)
 
-      if (!res.ok) {
-        return {
-          ok: false,
-          error: `Could not fetch the page (HTTP ${res.status}). Try pasting the HTML instead.`,
+          const res = await fetch(proxyUrl, {
+            signal: controller.signal,
+          }).finally(() => clearTimeout(timeout))
+
+          if (res.ok) {
+            html = await res.text()
+            fetchedFromUrl = true
+            break
+          }
+          lastError = `HTTP ${res.status}`
+        } catch (e: any) {
+          lastError = e?.name === "AbortError" ? "timed out" : (e?.message || "failed")
         }
       }
-      html = await res.text()
-      fetchedFromUrl = true
+
+      if (!html) {
+        return {
+          ok: false,
+          error: `Could not fetch the page via any proxy (${lastError}). Try pasting the HTML instead.`,
+        }
+      }
     } else {
       html = value
       target = "Pasted HTML"
@@ -149,7 +167,7 @@ export async function analyzeWebsite(
     return {
       ok: false,
       error:
-        "Failed to reach that URL via CORS proxy. The site may block proxies or be unreachable — try pasting its HTML instead.",
+        "Failed to reach that URL. The site may block proxies or be unreachable — try pasting its HTML instead.",
     }
   }
 
